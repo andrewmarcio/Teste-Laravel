@@ -12,7 +12,12 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
+});
+
+Route::prefix('category')->group( function () {
+    Route::get('/', 'CategoryController@create')->name('category.home');
+    Route::post('store', 'CategoryController@store')->name('category.store');
 });
 
 Auth::routes();
