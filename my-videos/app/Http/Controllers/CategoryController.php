@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\FavoriteCategory;
+use App\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+
+        try {
+            $listCategoryVideos = Category::all();
+
+            return  view('category.categories', compact('listCategoryVideos'));
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -28,7 +36,20 @@ class CategoryController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('category.categories', compact('categories'));
+        $myCategories = Category::where('user_id', Auth::user()->id)->get();
+        return view('category.register', compact('categories', 'myCategories'));
+    }
+
+    /**
+     * Show the all videos the category.
+     * @param int $categoryId
+     * @return \Illuminate\Http\Response
+     */
+    public function categoryVideos($categoryId)
+    {
+        $videos = Category::find($categoryId)->videos;
+        // dd(!count($videos));
+        return view('myvideos', compact('videos'));
     }
 
     /**
@@ -38,10 +59,10 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
 
         $user_id = Auth::user()->id;
-        
+
         try {
 
             DB::beginTransaction();
@@ -55,7 +76,7 @@ class CategoryController extends Controller
                 $message = 'Category successfully registered.';
             }
 
-            if(filter_var($request->favorite_category, FILTER_VALIDATE_BOOLEAN)){
+            if (filter_var($request->favorite_category, FILTER_VALIDATE_BOOLEAN)) {
                 $createFavoriteCategory = FavoriteCategory::create([
                     'user_id' => $user_id,
                     'category_id' => $createdCategory->id
@@ -78,12 +99,18 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $categoryId
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($categoryId)
     {
-        //
+        try {
+            
+            $categoryVideos = Video::where('category_id', $categoryId)->select(['title', 'url'])->get();
+            return response()->json($categoryVideos);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
@@ -112,11 +139,24 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $category_id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($category_id)
     {
-        //
+        try {
+            $deletedCategory = Category::find($category_id);
+            $category_name = $deletedCategory->name;
+
+            if ($deletedCategory->delete()) {
+                $message = "The {$category_name} category has been successfully deleted.";
+            } else {
+                $message = "There was an error deleting the category.";
+            }
+
+            return redirect()->back()->with('message', $message);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

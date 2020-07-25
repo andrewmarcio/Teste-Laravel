@@ -2,9 +2,10 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class FavoriteCategory extends Model
+class FavoriteCategory extends Pivot
 {
     protected $table = 'favorite_categories';
 

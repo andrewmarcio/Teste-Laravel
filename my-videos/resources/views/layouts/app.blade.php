@@ -21,21 +21,26 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('venobox/css/venobox.css') }}" type="text/css" media="screen" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('owlcarousel/assets/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('owlcarousel/assets/owl.theme.default.min.css') }}">
 
     <style>
     ::-webkit-scrollbar {
         display: none;
     }
-    .video{
-        height: 100px;
-        width: 100px;
+
+    .video img {
+        /* height: 100px;
+        width: 100px; */
         background-size: cover;
         cursor: pointer;
     }
-    .video i{
+
+    .video i {
         font-size: 32px;
         color: #fff;
-        margin: 35%  30%;
+        margin: 35% 30%;
     }
     </style>
 </head>
@@ -56,6 +61,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        <li class="nav-item @yield('active')">
+                            <a class="nav-link " href="{{ route('category.register') }}">Add Categories</a>
+                        </li>
                         <li class="nav-item @yield('active')">
                             <a class="nav-link " href="{{ route('category.home') }}">Categories</a>
                         </li>
@@ -110,6 +118,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
     </script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <script type="text/javascript" src="{{ asset('venobox/js/venobox.js') }}"></script>
 
